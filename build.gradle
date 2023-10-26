@@ -1,0 +1,30 @@
+plugins {
+    id "java-library"
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+    mavenCentral()
+}
+
+def commonsLoggingVersion = "1.2"
+def hibernateVersion = "6.1.7.Final"
+def lombokVersion = "1.18.26"
+def postgreSqlVersion = "42.5.4"
+
+dependencies {
+    implementation("commons-logging:commons-logging:${commonsLoggingVersion}")
+    implementation("org.hibernate:hibernate-core:${hibernateVersion}")
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    runtimeOnly("org.postgresql:postgresql:${postgreSqlVersion}")
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
