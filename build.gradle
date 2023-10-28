@@ -15,16 +15,31 @@ def hibernateVersion = "6.1.7.Final"
 def lombokVersion = "1.18.26"
 def postgreSqlVersion = "42.5.4"
 
+def jupiterPlatformVersion = "5.8.1"
+def jupiterPlatformSuiteVersion = "1.8.1"
+
 dependencies {
     implementation("commons-logging:commons-logging:${commonsLoggingVersion}")
     implementation("org.hibernate:hibernate-core:${hibernateVersion}")
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     runtimeOnly("org.postgresql:postgresql:${postgreSqlVersion}")
+
+    testImplementation("com.h2database:h2:2.1.214")
+    testImplementation("commons-logging:commons-logging:${commonsLoggingVersion}")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${jupiterPlatformVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:${jupiterPlatformVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${jupiterPlatformVersion}")
+    testImplementation("org.junit.platform:junit-platform-suite:${jupiterPlatformSuiteVersion}")
 }
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+}
+
+test {
+    useJUnitPlatform()
 }
