@@ -27,7 +27,7 @@ public class HibernateOtusExampleMain {
 
 		//insertNewBank(sessionFactory);
 		//insertNewCity(sessionFactory);
-		insertNewEmail(sessionFactory);
+		//insertNewEmail(sessionFactory);
 		//selectBank(sessionFactory);
 
 

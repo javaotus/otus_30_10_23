@@ -4,7 +4,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -69,8 +68,5 @@ public class Customer {
     @MapKeyColumn(name = "currency")
     @CollectionTable(name = "statement", joinColumns = { @JoinColumn(name = "customer") })
     private Map<Currency, BigDecimal> statement = new HashMap<>();
-
-    @Embedded
-    private ContactDetails contactDetails;
 
 }
