@@ -11,6 +11,7 @@ import org.hibernate.service.ServiceRegistry;
 import ru.otus.example.hibernate.entities.Account;
 import ru.otus.example.hibernate.entities.Bank;
 import ru.otus.example.hibernate.entities.City;
+import ru.otus.example.hibernate.entities.Currency;
 import ru.otus.example.hibernate.entities.Customer;
 import ru.otus.example.hibernate.entities.Email;
 
@@ -32,13 +33,14 @@ public class JavaBasedSessionFactory {
             props.put("hibernate.connection.username", "postgres");
             props.put("hibernate.connection.password", "postgres");
             props.put("hibernate.current_session_context_class", "thread");
-            props.put("hibernate.hbm2ddl.auto", "create");
+            props.put("hibernate.hbm2ddl.auto", "update");
 
             configuration.setProperties(props);
 
             configuration.addAnnotatedClass(Account.class);
             configuration.addAnnotatedClass(Bank.class);
             configuration.addAnnotatedClass(City.class);
+            configuration.addAnnotatedClass(Currency.class);
             configuration.addAnnotatedClass(Customer.class);
             configuration.addAnnotatedClass(Email.class);
 

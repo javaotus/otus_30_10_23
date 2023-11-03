@@ -1,5 +1,5 @@
 package ru.otus.example.hibernate.enums;
 
-public enum Currency {
+public enum CurrencyName {
     EUR, USD, AUD
 }

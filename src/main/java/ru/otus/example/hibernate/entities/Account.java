@@ -1,13 +1,14 @@
 package ru.otus.example.hibernate.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +17,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UuidGenerator;
-import ru.otus.example.hibernate.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +33,6 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "account")
 public class Account {
 
     @Id
@@ -40,21 +42,27 @@ public class Account {
     @Column(name = "account_number", nullable = false, unique = true)
     private String accountNumber;
 
-    @Column(nullable = false, unique = true, columnDefinition = "date default now()")
+    @Column(nullable = false, columnDefinition = "date default now()")
     private LocalDate created;
 
     @Column(nullable = false, columnDefinition = "double precision default 0")
     private BigDecimal balance;
 
-    @Column(nullable = false, columnDefinition = "varchar default 'USD'")
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "currency")
     private Currency currency;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean closed;
 
-    @ManyToOne
-    @JoinColumn(name = "bank")
-    private Bank bank;
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name="account_bank_customer", joinColumns=@JoinColumn(name="account"), inverseJoinColumns=@JoinColumn(name="bank"))
+    private Set<Bank> banks;
+
+    @Fetch(FetchMode.JOIN)
+    @JoinTable(name="account_bank_customer", joinColumns=@JoinColumn(name="account"), inverseJoinColumns=@JoinColumn(name="customer"))
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    private Set<Customer> customers;
 
 }
