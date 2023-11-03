@@ -13,7 +13,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,6 @@ import lombok.ToString;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import ru.otus.example.hibernate.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -40,7 +38,6 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "customer")
 public class Customer {
 
     @Id
@@ -60,13 +57,18 @@ public class Customer {
 
     @Fetch(FetchMode.JOIN)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name="bank_customer", joinColumns=@JoinColumn(name="customer"), inverseJoinColumns=@JoinColumn(name="bank"))
+    @JoinTable(name="account_bank_customer", joinColumns=@JoinColumn(name="customer"), inverseJoinColumns=@JoinColumn(name="account"))
+    private Set<Account> accounts;
+
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name="account_bank_customer", joinColumns=@JoinColumn(name="customer"), inverseJoinColumns=@JoinColumn(name="bank"))
     private Set<Bank> banks;
 
     @ElementCollection
     @Column(name = "amount")
     @MapKeyColumn(name = "currency")
     @CollectionTable(name = "statement", joinColumns = { @JoinColumn(name = "customer") })
-    private Map<Currency, BigDecimal> statement = new HashMap<>();
+    private Map<Integer, BigDecimal> statement = new HashMap<>();
 
 }
